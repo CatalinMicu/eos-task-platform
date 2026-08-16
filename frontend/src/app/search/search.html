@@ -1,0 +1,80 @@
+<main class="search-page">
+  <header class="page-header">
+    <p class="eyebrow">FIND YOUR WORK</p>
+    <h1>Search Tasks</h1>
+  </header>
+
+  <form class="search-panel" (ngSubmit)="search()">
+    <div class="search-bar">
+      <label for="subject">Search by subject</label>
+      <input
+        id="subject"
+        [(ngModel)]="subject"
+        name="subject"
+        placeholder="Enter a task subject"
+      />
+    </div>
+
+    <div class="filters">
+      <div class="filter">
+        <label for="assignedTo">Assigned To</label>
+        <input
+          id="assignedTo"
+          [(ngModel)]="assignedTo"
+          name="assignedTo"
+          placeholder="Name"
+        />
+      </div>
+
+      <div class="filter">
+        <label for="dueDate">Due Date</label>
+        <input
+          id="dueDate"
+          type="date"
+          [(ngModel)]="dueDate"
+          name="dueDate"
+        />
+      </div>
+
+      <div class="filter">
+        <label for="status">Status</label>
+        <select id="status" [(ngModel)]="status" name="status">
+          <option value="">Any status</option>
+          @for (statusType of statuses; track statusType.statusTypeId) {
+            <option [value]="statusType.statusName">
+              {{ statusType.statusName }}
+            </option>
+          }
+        </select>
+      </div>
+    </div>
+
+    <div class="buttons">
+      <button class="search-button" type="submit">Search</button>
+      <button class="clear-button" type="button" (click)="clear()">Clear</button>
+    </div>
+
+    @if (loading) {
+      <p class="loading">Loading</p>
+    }
+  </form>
+
+  @if (searched) {
+    @if (tasks.length > 0) {
+      <section class="results">
+        @for (task of tasks; track task.taskId) {
+          <article class="task-card">
+            <div class="task-card-top">
+              <span class="status">{{ task.statusName }}</span>
+              <span class="date">{{ task.dueDate }}</span>
+            </div>
+            <h2>{{ task.name }}</h2>
+            <p>Assigned to: {{ task.assignedTo }}</p>
+          </article>
+        }
+      </section>
+    } @else {
+      <p class="empty-message">No tasks found.</p>
+    }
+  }
+</main>

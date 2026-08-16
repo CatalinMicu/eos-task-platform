@@ -1,0 +1,194 @@
+<main class="tasks-page">
+  <header class="page-header">
+    <div>
+      <p class="eyebrow">YOUR WORK</p>
+      <h1>{{ pageTitle }}</h1>
+    </div>
+
+    @if (loginService.isAdmin) {
+      <div class="header-actions">
+        <div class="task-switch">
+          <button
+            type="button"
+            [class.active]="taskView === 'mine'"
+            (click)="showMyTasks()"
+          >
+            My tasks
+          </button>
+
+          <button
+            type="button"
+            [class.active]="taskView === 'assigned'"
+            (click)="showAssignedTasks()"
+          >
+            Assigned tasks
+          </button>
+
+          <button
+            type="button"
+            [class.active]="taskView === 'all'"
+            (click)="showEveryTask()"
+          >
+            All tasks
+          </button>
+        </div>
+
+        <button class="primary-button" type="button" (click)="openNewTask()">
+          New task
+        </button>
+      </div>
+    }
+  </header>
+
+  <section class="list-toolbar">
+    <span>{{ totalElements }} tasks</span>
+
+    <div class="sort-controls">
+      <label>
+        Sort by
+        <select [(ngModel)]="sortBy" (change)="changeTaskSorting()">
+          <option value="id">ID</option>
+          <option value="user">Assigned user</option>
+          <option value="name">Task name</option>
+        </select>
+      </label>
+
+      <label>
+        Direction
+        <select
+          [(ngModel)]="sortDirection"
+          (change)="changeTaskSorting()"
+        >
+          <option value="asc">Ascending</option>
+          <option value="desc">Descending</option>
+        </select>
+      </label>
+    </div>
+  </section>
+
+  <div class="task-grid">
+    @for (task of tasks; track task.taskId) {
+      <article
+        class="task-card"
+        [id]="'task-' + task.taskId"
+        [class.highlighted]="highlightedTaskId === task.taskId"
+      >
+        <div class="task-card-top">
+          <span class="status">{{ task.statusName }}</span>
+          <span class="date">{{ task.dueDate }}</span>
+        </div>
+
+        <h2>{{ task.name }}</h2>
+        @if (task.body) {
+          <p class="task-body">{{ task.body }}</p>
+        }
+        <p class="assigned-user">Assigned to: {{ task.assignedTo }}</p>
+
+        @if (loginService.isAdmin) {
+          <div class="card-actions">
+            <button
+              class="comments-button"
+              type="button"
+              (click)="openComments(task)"
+            >
+              Conversation
+            </button>
+
+            <div class="management-actions">
+              <button
+                class="edit-button"
+                type="button"
+                (click)="openEditTask(task)"
+              >
+                Edit
+              </button>
+
+              <button
+                class="delete-button"
+                type="button"
+                (click)="requestTaskDelete(task)"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        } @else {
+          <div class="user-actions">
+            <label>
+              Status
+              <select
+                [value]="task.statusName"
+                (change)="updateStatus(task.taskId, $event)"
+              >
+                @for (status of statuses; track status.statusTypeId) {
+                  <option [value]="status.statusName">
+                    {{ status.statusName }}
+                  </option>
+                }
+              </select>
+            </label>
+
+            <button
+              class="comments-button"
+              type="button"
+              (click)="openComments(task)"
+            >
+              Conversation
+            </button>
+          </div>
+        }
+      </article>
+    } @empty {
+      <p class="empty-message">You do not have any tasks yet.</p>
+    }
+  </div>
+
+  @if (totalPages > 1) {
+    <nav class="pagination" aria-label="Task pages">
+      <button
+        type="button"
+        [disabled]="currentPage === 1"
+        (click)="previousPage()"
+      >
+        Previous
+      </button>
+
+      <span>Page {{ currentPage }} of {{ totalPages }}</span>
+
+      <button
+        type="button"
+        [disabled]="currentPage === totalPages"
+        (click)="nextPage()"
+      >
+        Next
+      </button>
+    </nav>
+  }
+</main>
+
+@if (isModalOpen) {
+  <app-new-task
+    [task]="selectedTask"
+    [statuses]="statuses"
+    [users]="users"
+    (save)="saveTask($event)"
+    (cancel)="closeModal()"
+  />
+}
+
+@if (commentTask) {
+  <app-task-comments
+    [task]="commentTask"
+    (close)="closeComments()"
+  />
+}
+
+@if (taskToDelete) {
+  <app-confirm-dialog
+    title="Delete task?"
+    [message]="'The task ' + taskToDelete.name + ' will be permanently deleted.'"
+    confirmText="Delete task"
+     (confirmed)="confirmTaskDelete(taskToDelete)"
+    (cancelled)="taskToDelete = null"
+  />
+}

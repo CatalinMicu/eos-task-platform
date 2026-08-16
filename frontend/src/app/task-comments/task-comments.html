@@ -1,0 +1,89 @@
+<div class="comments-backdrop">
+  <section class="comments-panel">
+    <header class="comments-header">
+      <div>
+        <p class="eyebrow">TASK CONVERSATION</p>
+        <h2>{{ task.name }}</h2>
+      </div>
+
+      <button class="close-button" type="button" (click)="close.emit()">
+        Close
+      </button>
+    </header>
+
+    @if (task.body) {
+      <div class="task-description">
+        <strong>Description</strong>
+        <p>{{ task.body }}</p>
+      </div>
+    }
+
+    <div class="comment-list">
+      @for (comment of comments; track comment.commentId) {
+        <article
+          class="comment"
+          [class.own-comment]="isOwnComment(comment)"
+        >
+          <div class="comment-meta">
+            <strong>{{ comment.username }}</strong>
+            <span>{{ comment.creationDate | date: 'short' }}</span>
+          </div>
+
+          <p>{{ comment.body }}</p>
+
+          @if (isOwnComment(comment)) {
+            <div class="comment-actions">
+              <button
+                class="delete-comment-button"
+                type="button"
+                (click)="requestCommentDelete(comment)"
+              >
+                Delete
+              </button>
+            </div>
+          }
+        </article>
+      } @empty {
+        <p class="empty-comments">No comments yet. Start the conversation.</p>
+      }
+    </div>
+
+    @if (errorMessage) {
+      <p class="comment-error">{{ errorMessage }}</p>
+    }
+
+    <form (ngSubmit)="addComment()">
+      <label for="newComment">New comment</label>
+      <textarea
+        id="newComment"
+        name="newComment"
+        [(ngModel)]="newComment"
+        maxlength="2000"
+        rows="3"
+        placeholder="Write a comment"
+      ></textarea>
+
+      <button
+        class="send-button"
+        type="submit"
+        [disabled]="!newComment.trim() || isSaving"
+      >
+        @if (isSaving) {
+          Sending...
+        } @else {
+          Send comment
+        }
+      </button>
+    </form>
+  </section>
+</div>
+
+@if (commentToDelete !== null) {
+  <app-confirm-dialog
+    title="Delete comment?"
+    message="This comment will be permanently deleted."
+    confirmText="Delete comment"
+    (confirmed)="confirmCommentDelete(commentToDelete)"
+    (cancelled)="commentToDelete = null"
+  />
+}

@@ -1,0 +1,11 @@
+<main class="home-page">
+  <p class="eyebrow">TASK APP</p>
+
+  @if (loginService.isLoggedIn) {
+    <h1>Welcome, {{ loginService.username }}!</h1>
+  } @else {
+    <h1>Welcome, Guest!</h1>
+  }
+
+  <p>Use the navigation bar to manage and search your tasks.</p>
+</main>

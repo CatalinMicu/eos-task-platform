@@ -1,0 +1,22 @@
+<div class="confirm-backdrop" (click)="cancelled.emit()">
+  <section
+    class="confirm-dialog"
+    role="dialog"
+    aria-modal="true"
+    [attr.aria-label]="title"
+    (click)="$event.stopPropagation()"
+  >
+    <p class="confirm-eyebrow">PLEASE CONFIRM</p>
+    <h2>{{ title }}</h2>
+    <p class="confirm-message">{{ message }}</p>
+
+    <div class="confirm-actions">
+      <button class="cancel-button" type="button" (click)="cancelled.emit()">
+        Cancel
+      </button>
+      <button class="confirm-button" type="button" (click)="confirmed.emit()">
+        {{ confirmText }}
+      </button>
+    </div>
+  </section>
+</div>

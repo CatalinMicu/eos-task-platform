@@ -1,0 +1,35 @@
+.home-page {
+  width: min(900px, 90%);
+  margin: 70px auto;
+  padding: 48px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 8px solid var(--accent);
+  border-radius: 12px;
+  box-shadow: 0 14px 35px rgba(36, 49, 45, 0.08);
+}
+
+.home-page h1 {
+  margin: 8px 0 12px;
+  font-size: clamp(32px, 6vw, 54px);
+}
+
+.home-page p {
+  color: var(--muted);
+  font-size: 18px;
+}
+
+.home-page .eyebrow {
+  margin: 0;
+  color: var(--primary);
+  font-size: 13px;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
+
+@media (max-width: 600px) {
+  .home-page {
+    margin-top: 35px;
+    padding: 30px 24px;
+  }
+}

@@ -1,0 +1,10 @@
+spring.datasource.url=${DB_URL:jdbc:oracle:thin:@localhost:1521/FREEPDB1}
+spring.datasource.username=${DB_USERNAME:task}
+spring.datasource.password=${DB_PASSWORD:replace-me}
+spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
+
+spring.jpa.database-platform=org.hibernate.dialect.OracleDialect
+spring.jpa.hibernate.ddl-auto=validate
+
+jwt.secret=${JWT_SECRET:replace-with-a-long-local-secret}
+jwt.expiration.ms=${JWT_EXPIRATION_MS:3600000}

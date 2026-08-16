@@ -1,0 +1,40 @@
+<div class="notifications">
+  <button class="notifications-button" type="button" (click)="togglePanel()">
+    Notifications
+    @if (unreadCount > 0) {
+      <span class="notification-count">{{ unreadCount }}</span>
+    }
+  </button>
+
+  @if (isOpen) {
+    <section class="notifications-panel">
+      <header>
+        <strong>Notifications</strong>
+        <button type="button" (click)="loadNotifications()">Refresh</button>
+      </header>
+
+      @if (errorMessage) {
+        <p class="notification-error">{{ errorMessage }}</p>
+      }
+
+      <div class="notification-list">
+        @for (
+          notification of notifications;
+          track notification.notificationId
+        ) {
+          <button
+            class="notification-item"
+            type="button"
+            [class.unread]="notification.isRead === 0"
+            (click)="openNotification(notification)"
+          >
+            <span>{{ notification.message }}</span>
+            <small>{{ notification.creationDate | date: 'short' }}</small>
+          </button>
+        } @empty {
+          <p class="empty-notifications">No notifications.</p>
+        }
+      </div>
+    </section>
+  }
+</div>

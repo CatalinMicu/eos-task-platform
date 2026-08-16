@@ -1,0 +1,91 @@
+<div class="modal-backdrop">
+  <div class="modal">
+    @if (task) {
+      <h2>Edit Task</h2>
+    } @else {
+      <h2>New Task</h2>
+    }
+
+    <form #taskForm="ngForm" (ngSubmit)="submit()">
+      <label for="subject">Subject</label>
+      <input
+        id="subject"
+        name="subject"
+        [(ngModel)]="model.name"
+        #subject="ngModel"
+        required
+        maxlength="255"
+        pattern=".*\S.*"
+      />
+      @if (subject.invalid && subject.touched) {
+        <small class="field-error">
+          Subject is required and cannot exceed 255 characters.
+        </small>
+      }
+
+      <label for="body">Description</label>
+      <textarea
+        id="body"
+        name="body"
+        [(ngModel)]="model.body"
+        #body="ngModel"
+        required
+        maxlength="2000"
+        rows="5"
+        placeholder="Describe what needs to be done"
+      ></textarea>
+      @if (body.touched && !model.body.trim()) {
+        <small class="field-error">Description is required.</small>
+      }
+
+      <label for="dueDate">Due Date</label>
+      <input
+        id="dueDate"
+        name="dueDate"
+        type="date"
+        [(ngModel)]="model.dueDate"
+        #dueDate="ngModel"
+        [min]="today"
+        required
+      />
+      @if (dueDate.touched && dueDate.invalid) {
+        <small class="field-error">
+          Due date must be today or a future date.
+        </small>
+      }
+
+      <label for="status">Status</label>
+      <select id="status" name="status" [(ngModel)]="model.statusName" required>
+        <option value="" disabled>Select status</option>
+        @for (status of statuses; track status.statusTypeId) {
+          <option [value]="status.statusName">{{ status.statusName }}</option>
+        }
+      </select>
+
+      <label for="userId">Assigned User</label>
+      <select id="userId" name="userId" [(ngModel)]="model.userId">
+        <option [ngValue]="0" disabled>Select user</option>
+        @for (user of users; track user.userId) {
+          <option [ngValue]="user.userId">{{ user.username }}</option>
+        }
+      </select>
+
+      <div class="buttons">
+        <button class="cancel-button" type="button" (click)="cancel.emit()">
+          Cancel
+        </button>
+        <button
+          class="save-button"
+          type="submit"
+          [disabled]="
+            taskForm.invalid ||
+            !model.body.trim() || 
+            model.userId === 0
+          "
+        >
+          Save
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

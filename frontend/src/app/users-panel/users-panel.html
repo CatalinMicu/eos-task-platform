@@ -1,0 +1,158 @@
+<main class="users-page">
+  <header class="users-header">
+    <div>
+      <p class="eyebrow">ADMINISTRATION</p>
+      <h1>User access</h1>
+      <p class="page-description">
+        Manage account roles and remove users who no longer need access.
+      </p>
+    </div>
+
+    <div class="user-count">
+      <strong>{{ totalUsers }}</strong>
+      <span>registered users</span>
+    </div>
+  </header>
+
+  <form class="user-search" (ngSubmit)="searchUsers()">
+    <label for="userSearch">Search by username or email</label>
+
+    <div class="user-search-controls">
+      <input
+        id="userSearch"
+        name="userSearch"
+        type="text"
+        [(ngModel)]="searchText"
+        placeholder="Enter a username or email"
+      />
+
+      <button class="search-button" type="submit">Search</button>
+      <button class="clear-search-button" type="button" (click)="clearSearch()">
+        Clear
+      </button>
+    </div>
+  </form>
+
+  <section class="list-toolbar">
+    <span>Page {{ currentPage }} of {{ totalPages }}</span>
+
+    <div class="sort-controls">
+      <label>
+        Sort by
+        <select [(ngModel)]="sortBy" (change)="changeUserSorting()">
+          <option value="id">ID</option>
+          <option value="username">Username</option>
+          <option value="email">Email</option>
+          <option value="role">Role</option>
+        </select>
+      </label>
+
+      <label>
+        Direction
+        <select
+          [(ngModel)]="sortDirection"
+          (change)="changeUserSorting()"
+        >
+          <option value="asc">Ascending</option>
+          <option value="desc">Descending</option>
+        </select>
+      </label>
+    </div>
+  </section>
+
+  <section class="users-grid">
+    @for (user of users; track user.userId) {
+      <article class="user-card">
+        <div class="user-identity">
+          <div class="user-avatar">
+            {{ user.username.charAt(0).toUpperCase() }}
+          </div>
+
+          <div>
+            <div class="user-name-row">
+              <h2>{{ user.username }}</h2>
+              @if (isCurrentUser(user.userId)) {
+                <span class="current-user-badge">You</span>
+              }
+            </div>
+            <p>{{ user.email }}</p>
+          </div>
+        </div>
+
+        <div class="role-badge" [class.admin-role]="user.roleName !== 'USER'">
+          {{ user.roleName }}
+        </div>
+
+        <div class="user-actions">
+          <label>
+            <span>Access role</span>
+            <select
+              [value]="user.roleName"
+              [disabled]="!canChangeRole(user)"
+              [title]="getRoleTitle(user)"
+              (change)="
+                changeUserRole(
+                  user.userId,
+                  $any($event.target).value
+                )
+              "
+            >
+              <option value="USER">USER</option>
+              <option value="ADMIN">ADMIN</option>
+            </select>
+          </label>
+
+          <button
+            class="delete-button"
+            type="button"
+            [disabled]="!canDeleteUser(user)"
+            [title]="getDeleteTitle(user)"
+            (click)="requestUserDelete(user)"
+          >
+            Delete
+          </button>
+        </div>
+      </article>
+    } @empty {
+      <div class="empty-users">
+        <p>No users found.</p>
+      </div>
+    }
+  </section>
+
+  @if (totalPages > 1) {
+    <nav class="pagination" aria-label="User pages">
+      <button
+        type="button"
+        [disabled]="currentPage === 1"
+        (click)="previousPage()"
+      >
+        Previous
+      </button>
+
+      <span>Page {{ currentPage }} of {{ totalPages }}</span>
+
+      <button
+        type="button"
+        [disabled]="currentPage === totalPages"
+        (click)="nextPage()"
+      >
+        Next
+      </button>
+    </nav>
+  }
+</main>
+
+@if (userToDelete) {
+  <app-confirm-dialog
+    title="Delete user?"
+    [message]="
+      'The account ' +
+      userToDelete.username +
+      ' and all assigned tasks will be permanently deleted.'
+    "
+    confirmText="Delete user"
+     (confirmed)="confirmUserDelete(userToDelete)"
+    (cancelled)="userToDelete = null"
+  />
+}

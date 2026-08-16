@@ -1,0 +1,185 @@
+<div class="login-container">
+  @if (!isRegisterMode) {
+    <form
+      class="login-form"
+      #loginForm="ngForm"
+      (ngSubmit)="authenticate()"
+    >
+      <h2>Login</h2>
+
+      <label for="login-email">Email</label>
+      <input
+        id="login-email"
+        name="email"
+        type="email"
+        [(ngModel)]="loginData.email"
+        #loginEmail="ngModel"
+        required
+        email
+      />
+      @if (loginEmail.invalid && loginEmail.touched) {
+        <small class="field-error">Enter a valid email address.</small>
+      }
+
+      <label for="login-password">Password</label>
+      <div class="password-field">
+        <input
+          id="login-password"
+          name="password"
+          [type]="passwordInputType"
+          [(ngModel)]="loginData.password"
+          #loginPassword="ngModel"
+          required
+        />
+        <button
+          class="password-toggle"
+          type="button"
+          (click)="togglePasswordVisibility()"
+        >
+          {{ passwordToggleText }}
+        </button>
+      </div>
+      @if (loginPassword.invalid && loginPassword.touched) {
+        <small class="field-error">Password is required.</small>
+      }
+
+      <div class="form-buttons">
+        <button
+          type="button"
+          (click)="showRegisterForm()"
+        >
+          Register
+        </button>
+
+        <button type="submit" [disabled]="loginForm.invalid">
+          Login
+        </button>
+      </div>
+    </form>
+  } @else {
+    <form
+      class="login-form"
+      #registerForm="ngForm"
+      (ngSubmit)="register()"
+    >
+      <h2>Register</h2>
+
+      <label for="username">Username</label>
+      <input
+        id="username"
+        name="username"
+        type="text"
+        [(ngModel)]="registerData.username"
+        #username="ngModel"
+        required
+        minlength="3"
+        maxlength="50"
+        pattern=".*\S.*"
+      />
+      @if (username.invalid && username.touched) {
+        <small class="field-error">
+          Username must contain between 3 and 50 characters.
+        </small>
+      }
+
+      <label for="birthDate">Birth date</label>
+      <input
+        id="birthDate"
+        name="birthDate"
+        type="date"
+        [(ngModel)]="registerData.birthDate"
+        #birthDate="ngModel"
+        [max]="today"
+        required
+      />
+      @if (birthDate.touched && birthDate.invalid) {
+        <small class="field-error">Birth date must be in the past.</small>
+      }
+
+      <label for="register-email">Email</label>
+      <input
+        id="register-email"
+        name="email"
+        type="email"
+        [(ngModel)]="registerData.email"
+        #registerEmail="ngModel"
+        required
+        email
+          maxlength="255"
+      />
+      @if (registerEmail.invalid && registerEmail.touched) {
+        <small class="field-error">Enter a valid email address.</small>
+      }
+
+      <label for="register-password">Password</label>
+      <div class="password-field">
+        <input
+          id="register-password"
+          name="password"
+          [type]="passwordInputType"
+          [(ngModel)]="registerData.password"
+          #registerPassword="ngModel"
+          required
+          minlength="6"
+          maxlength="100"
+          pattern=".*\S.*"
+        />
+        <button
+          class="password-toggle"
+          type="button"
+          (click)="togglePasswordVisibility()"
+        >
+          {{ passwordToggleText }}
+        </button>
+      </div>
+      @if (registerPassword.invalid && registerPassword.touched) {
+        <small class="field-error">
+          Password must contain at least 6 characters.
+        </small>
+      }
+
+      <label for="confirm-password">Confirm password</label>
+      <div class="password-field">
+        <input
+          id="confirm-password"
+          name="confirmPassword"
+          [type]="passwordInputType"
+          [(ngModel)]="confirmPassword"
+          #confirmPasswordInput="ngModel"
+          required
+        />
+      </div>
+      @if (
+        confirmPasswordInput.touched &&
+        registerData.password !== confirmPassword
+      ) {
+        <small class="field-error">Passwords do not match.</small>
+      }
+
+      <div class="form-buttons">
+        <button
+          type="button"
+          (click)="showLoginForm()"
+        >
+          Back to login
+        </button>
+
+        <button
+          type="submit"
+          [disabled]="
+            registerForm.invalid ||
+            registerData.password !== confirmPassword
+          "
+        >
+          Register
+        </button>
+      </div>
+    </form>
+  }
+
+  @if (errorMessage) {
+    <p class="error-message">
+      {{ errorMessage }}
+    </p>
+  }
+</div>

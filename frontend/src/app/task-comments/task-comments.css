@@ -1,0 +1,146 @@
+.comments-backdrop {
+  position: fixed;
+  z-index: 20;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(22, 42, 36, 0.58);
+}
+
+.comments-panel {
+  display: flex;
+  width: min(680px, 100%);
+  max-height: 88vh;
+  padding: 24px;
+  flex-direction: column;
+  background: var(--surface);
+  border-radius: 12px;
+  box-shadow: 0 24px 65px rgba(0, 0, 0, 0.25);
+}
+
+.comments-header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.comments-header h2 {
+  margin: 4px 0 0;
+}
+
+.close-button {
+  padding: 8px 12px;
+  color: var(--text);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.task-description {
+  margin-top: 18px;
+  padding: 14px;
+  background: #f0eee7;
+  border-radius: 8px;
+}
+
+.task-description p {
+  margin: 6px 0 0;
+  white-space: pre-wrap;
+}
+
+.comment-list {
+  display: flex;
+  min-height: 160px;
+  margin: 18px 0;
+  padding-right: 4px;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+}
+
+.comment {
+  max-width: 82%;
+  padding: 11px 13px;
+  align-self: flex-start;
+  background: #ece9e0;
+  border-radius: 4px 10px 10px 10px;
+}
+
+.comment.own-comment {
+  align-self: flex-end;
+  background: #dcece6;
+  border-radius: 10px 4px 10px 10px;
+}
+
+.comment-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.comment p {
+  margin: 7px 0 0;
+  white-space: pre-wrap;
+}
+
+.comment-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 7px;
+  margin-top: 10px;
+}
+
+.comment-actions button {
+  padding: 5px 9px;
+  color: var(--primary);
+  background: transparent;
+  border: 1px solid var(--primary);
+  border-radius: 5px;
+}
+
+.comment-actions .delete-comment-button {
+  color: #a33b31;
+  border-color: #c98c86;
+}
+
+.empty-comments {
+  color: var(--muted);
+}
+
+.comment-error {
+  color: #a33b31;
+}
+
+.comments-panel form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.comments-panel textarea {
+  padding: 10px;
+  resize: vertical;
+  font: inherit;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.send-button {
+  padding: 10px 15px;
+  align-self: flex-end;
+  color: white;
+  background: var(--primary);
+  border: 0;
+  border-radius: 6px;
+  font-weight: bold;
+}
+
+.send-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
