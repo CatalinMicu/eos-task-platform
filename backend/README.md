@@ -1,6 +1,6 @@
-# EOS Task Management API
+# Task Management API
 
-Spring Boot REST API for a task-management application. The API provides authentication, role-based access control, task management, comments, notifications, and server-side pagination for the Angular frontend.
+Spring Boot REST API for the task-management application developed during my Java Full-Stack Developer internship at EOS IT Solutions. The API provides authentication, role-based access control, task management, comments, notifications, and server-side pagination for the Angular frontend.
 
 [Frontend application](../frontend)
 

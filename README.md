@@ -1,8 +1,8 @@
-# EOS Task Management Platform
+# Task Management Platform
 
-EOS is a full-stack task-management application built during a Java full-stack internship. It lets teams assign work, track progress, discuss tasks and receive notifications in one place.
+This repository contains the full-stack task-management application I developed during my Java Full-Stack Developer internship at EOS IT Solutions. It lets teams assign work, track progress, discuss tasks and receive notifications in one place.
 
-The project connects an Angular client to a Spring Boot REST API and an Oracle database. The repository is intentionally kept as a practical internship project: the code is split into understandable modules and the main request flows can be followed from the UI to the database.
+The project connects an Angular client to a Spring Boot REST API and an Oracle database. It is kept as a practical internship project: the code is split into understandable modules and the main request flows can be followed from the UI to the database.
 
 ## What the application demonstrates
 
