@@ -58,9 +58,9 @@ The project connects an Angular client to a Spring Boot REST API and an Oracle d
 ```mermaid
 flowchart LR
     UI[Angular frontend] -->|HTTP request| INT[Auth interceptor]
-    INT -->|Bearer JWT| API[Spring Boot REST API]
-    API --> SEC[JWT filter and permission checks]
-    API --> SVC[Service layer]
+    INT -->|Bearer JWT| SEC[Spring Security filter chain]
+    SEC -->|authenticated request| CTRL[REST controllers]
+    CTRL --> SVC[Service layer]
     SVC --> MAP[DTO mappers]
     SVC --> REPO[Spring Data repositories]
     REPO --> DB[(Oracle database)]
